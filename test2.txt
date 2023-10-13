@@ -1,0 +1,69 @@
+import numpy as np
+from tkinter import Tk, Frame,Label, Button, Entry,Label, TOP,BooleanVar,Checkbutton
+
+from functools import partial
+
+window = Tk()
+window.title("My Window")
+window.configure(bg='lightgrey')
+
+
+main_frame=Frame(window,bg='lightgray')
+main_frame.pack(side=TOP,expand=True)
+
+
+random_number_frame=Frame(main_frame)
+random_number_frame.pack(side=TOP,expand=True)
+random_number_label=Label(random_number_frame, 
+bg='lightgray',text='Random Integer: ')
+random_number_label.pack(side=TOP)
+
+random_number_entry= Label(random_number_frame, width=8)
+random_number_entry.pack(side=TOP)
+
+
+channel_frame=Frame(main_frame,bg='lightgray')
+channel_frame.pack(side=TOP,expand=True,pady=10)
+
+channels=['a','b','c','d','e','f','g','h']
+
+def _create_random():
+
+    global channel_frame
+    
+    random_number=np.random.randint(3,8)
+    random_number_entry.configure(text=str(random_number))
+
+    channel_frame.destroy()
+    
+    channel_frame=Frame(main_frame,bg='lightgray')
+    channel_frame.pack(side=TOP,expand=True,pady=10)
+
+    print(channel_frame)
+    
+    num_rows=3
+
+    channel_vars=[]
+    channel_buttons=[]
+
+    for i in range(np.random.randint(3,8)):
+        channel_vars.append(BooleanVar())
+        channel_vars[i].set(False)
+        channel_buttons.append(Checkbutton(channel_frame, text=channels[i],var=channel_vars[i],bg='lightgray'))
+        row_number=3+int(divmod(i,num_rows)[1])
+        column_number=1+int(divmod(i,num_rows)[0])
+        channel_buttons[i].grid(sticky="W",row=row_number, column=column_number)
+
+create_button = Button(main_frame, text="Do It!", 
+bg='lightgray',command=_create_random)
+create_button.pack(side=TOP,padx=10)
+
+def _quit():
+    window.quit()
+    window.destroy()
+
+quit_button = Button(master=window, text="Quit", 
+bg='lightgray',command=_quit)
+quit_button.pack(side=TOP,padx=10)
+
+window.mainloop()
